@@ -7,6 +7,9 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float jumForce;
     [SerializeField] Rigidbody rb;
+    private ConstantForce gravityForce;
+    private float gravity;
+    private Vector3 gravityDirection;
     float baseSpeed;
     bool canJump;
 
@@ -17,8 +20,10 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float dashCharge;
     [SerializeField] float dashUpward;
     [SerializeField] float dashDuration;
+    [SerializeField] float dashGravityMultiplier;
     [SerializeField] bool isDashing;
     [SerializeField] bool isCharging;
+
 
     [Header("Camara")]
     Vector3 cameraForward;
@@ -57,6 +62,10 @@ public class PlayerScript : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         baseSpeed = speed;
+        gravityForce = GetComponent<ConstantForce>();
+        gravity = -9.8f;
+        gravityDirection = new Vector3(0, gravity, 0);
+        gravityForce.force = gravityDirection;
         
     }
 
@@ -123,6 +132,7 @@ public class PlayerScript : MonoBehaviour
         {
             isCharging = true;
             rb.linearVelocity = Vector3.zero;
+            gravityDirection = gravityDirection * dashGravityMultiplier;
         }
         if (context.canceled)
         {
@@ -142,6 +152,7 @@ public class PlayerScript : MonoBehaviour
                 Invoke(nameof(ResetDash), dashDuration);
             }
             isCharging = false;
+            gravityDirection = new Vector3(0, gravity, 0);
         }
     }
 

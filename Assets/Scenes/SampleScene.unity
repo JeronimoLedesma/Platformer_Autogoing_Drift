@@ -425,6 +425,7 @@ GameObject:
   - component: {fileID: 598100972}
   - component: {fileID: 598100971}
   - component: {fileID: 598100973}
+  - component: {fileID: 598100974}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -544,6 +545,7 @@ MonoBehaviour:
   dashCharge: 0
   dashUpward: 0
   dashDuration: 0.8
+  dashGravityMultiplier: 0
   isDashing: 0
   isCharging: 0
   grounded: 0
@@ -583,7 +585,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -650,6 +652,18 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!75 &598100974
+ConstantForce:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598100966}
+  m_Enabled: 1
+  m_Force: {x: 0, y: 0, z: 0}
+  m_RelativeForce: {x: 0, y: 0, z: 0}
+  m_Torque: {x: 0, y: 0, z: 0}
+  m_RelativeTorque: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
