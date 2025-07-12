@@ -7,6 +7,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float jumForce;
     [SerializeField] Rigidbody rb;
+    float baseSpeed;
     bool canJump;
 
     [Header("Dash")]
@@ -16,8 +17,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float dashCharge;
     [SerializeField] float dashUpward;
     [SerializeField] float dashDuration;
-    bool isDashing;
-    bool isCharging;
+    [SerializeField] bool isDashing;
+    [SerializeField] bool isCharging;
 
     [Header("Camara")]
     Vector3 cameraForward;
@@ -55,6 +56,7 @@ public class PlayerScript : MonoBehaviour
         isCharging = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        baseSpeed = speed;
         
     }
 
@@ -72,6 +74,9 @@ public class PlayerScript : MonoBehaviour
         cameraRight = cameraRight.normalized;
 
         grounded = Physics.Raycast(transform.position, Vector3.down, height * 0.5f + 0.2f, ground);
+        if (grounded) { 
+        canJump = true;
+        }
 
         if (grounded && !isDashing)
         {
@@ -86,9 +91,11 @@ public class PlayerScript : MonoBehaviour
         isWall = Physics.SphereCast(transform.position, sphereCastRadius, cameraForward, out frontWall, detectionLength, wall);
         wallAngle = Vector3.Angle(cameraForward, -frontWall.normal);
 
-        //Implementar climb
-        /*StateOfClimb();
-        if(isClimbing) ClimbingMove();*/
+        
+        StateOfClimb();
+        if(isClimbing) ClimbingMove();
+
+        SpeedControl();
 
         ChargeTime();
         if (!isCharging)
@@ -115,6 +122,7 @@ public class PlayerScript : MonoBehaviour
         if (context.started)
         {
             isCharging = true;
+            rb.linearVelocity = Vector3.zero;
         }
         if (context.canceled)
         {
@@ -124,12 +132,14 @@ public class PlayerScript : MonoBehaviour
                 Vector3 forceToApply = cameraForward * dashForceStart + cameraUp * dashUpward;
                 rb.AddForce(forceToApply, ForceMode.Impulse);
                 speed = dashForceStart;
+                Invoke(nameof(ResetDash), dashDuration);
             }
             if (dashCharge >= 2)
             {
                 Vector3 forceToApply = cameraForward * dashForceStart * 2 + cameraUp * dashUpward;
                 rb.AddForce(forceToApply, ForceMode.Impulse);
                 speed = dashForceStart*2;
+                Invoke(nameof(ResetDash), dashDuration);
             }
             isCharging = false;
         }
@@ -145,5 +155,52 @@ public class PlayerScript : MonoBehaviour
         {
             dashCharge = 0f;
         }
+    }
+
+    private void ResetDash()
+    {
+        isDashing = false;
+        speed = baseSpeed;
+    }
+
+    private void SpeedControl()
+    {
+        Vector3 flatSpeed = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        if (flatSpeed.magnitude > speed)
+        {
+            Vector3 limit = flatSpeed.normalized * speed;
+            rb.linearVelocity = new Vector3(limit.x, rb.linearVelocity.y, limit.z);
+        }
+    }
+
+    private void StateOfClimb()
+    {
+        if (wallAngle < wallAngleMax && isWall)
+        {
+            if (!isClimbing && climbTimer > 0) StartClimb();
+
+            if (climbTimer > 0) climbTimer -= Time.deltaTime;
+            if (climbTimer < 0) StopClimb();
+        }
+
+        else
+        {
+            if (isClimbing) StopClimb();
+        }
+    }
+
+    private void StartClimb()
+    {
+        isClimbing = true;
+    }
+
+    private void ClimbingMove()
+    {
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, climbSpeed, rb.linearVelocity.z);
+    }
+
+    private void StopClimb()
+    {
+        isClimbing = false;
     }
 }
