@@ -214,4 +214,28 @@ public class PlayerScript : MonoBehaviour
     {
         isClimbing = false;
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (isDashing)
+        {
+            if (collision.collider.GetComponent<IRecibirDaño>() != null)
+            {
+                collision.collider.GetComponent<IRecibirDaño>().RecibirDaño(10);
+            }
+            if (collision.collider.GetComponent<IKnockBack>() != null)
+            {
+                collision.collider.GetComponent<IKnockBack>().Execute(transform);
+            }
+        }
+        else
+        {
+            if (collision.collider.CompareTag("Enemy"))
+            {
+                //logica de perder
+                Debug.Log("Perdiste");
+            }
+            
+        }
+    }
 }
