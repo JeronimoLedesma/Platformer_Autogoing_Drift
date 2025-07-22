@@ -153,12 +153,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16b891d429e5fe34995ffe5ef2211d0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
+  speed: 15
   jumForce: 7
   rb: {fileID: 0}
   cameraPlayer: {fileID: 0}
   rotationSpeed: 4
-  dashForceStart: 15
+  dashForceStart: 24
   dashCharge: 0
   dashUpward: 0
   dashDuration: 0.8

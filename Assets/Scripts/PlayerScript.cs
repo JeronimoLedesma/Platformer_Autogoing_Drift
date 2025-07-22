@@ -237,5 +237,9 @@ public class PlayerScript : MonoBehaviour
             }
             
         }
+        if (collision.collider.GetComponent<IObjective>() != null)
+        {
+            collision.collider.GetComponent<IObjective>().ObjectiveReached();
+        }
     }
 }
