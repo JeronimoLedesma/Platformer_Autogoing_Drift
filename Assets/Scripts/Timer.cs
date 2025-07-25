@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class Timer : MonoBehaviour
         if (remainingTime <= 0)
         {
             Debug.Log("Perdiste");
-            //logica de perder
+            SceneManager.LoadScene(7);
         }
     }
 }

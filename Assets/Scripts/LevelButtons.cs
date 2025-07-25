@@ -7,6 +7,7 @@ public class LevelButtons : MonoBehaviour
      public void LoadLevel()
     {
         Debug.Log("Cargando nivel " +  level);
-        /*SceneManager.LoadScene(level);*/
+        GameManager.lastLevel = level;
+        SceneManager.LoadScene(level);
     }
 }

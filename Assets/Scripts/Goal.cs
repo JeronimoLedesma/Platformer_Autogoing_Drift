@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Goal : MonoBehaviour, IObjective
 {
     public void ObjectiveReached()
     {
         Debug.Log("Llegaste al Objetivo");
-        //Logica de victoria
+        SceneManager.LoadScene(6);
     }
 }

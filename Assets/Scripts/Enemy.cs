@@ -21,9 +21,9 @@ public abstract class Enemy : MonoBehaviour, IRecibirDaño, IKnockBack
         life -= daño;
         if (life <= 0)
         {
-            //animacion play
-            //Destroy(gameObject);
+            Destroy(gameObject);
             Debug.Log("Enemigo Muerto");
+            GameManager.defeatedEnemies++;
         }
     }
 

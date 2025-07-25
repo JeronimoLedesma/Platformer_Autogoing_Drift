@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -54,6 +55,7 @@ public class PlayerScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        GameManager.defeatedEnemies = 0;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         canJump = true;
@@ -232,7 +234,7 @@ public class PlayerScript : MonoBehaviour
         {
             if (collision.collider.CompareTag("Enemy"))
             {
-                //logica de perder
+                SceneManager.LoadScene(7);
                 Debug.Log("Perdiste");
             }
             
