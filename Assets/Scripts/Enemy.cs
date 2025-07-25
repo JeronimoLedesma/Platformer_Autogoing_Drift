@@ -4,10 +4,7 @@ using UnityEngine.VFX;
 public abstract class Enemy : MonoBehaviour, IRecibirDaño, IKnockBack
 {
     [SerializeField] protected float life;
-    /*[SerializeField] protected float damage;*/
     [SerializeField] protected float speed;
-    //[SerializeField] protected VisualEffect boom;
-    //[SerializeField] protected float boomTime;
     protected Rigidbody rb;
 
     protected void Start()

@@ -8,15 +8,19 @@ public class EnemyPath : Enemy
     
     void Update()
     {
-        Moverse();
-        if (transform.position == objetivo1.transform.position)
+        if (!GameManager.pause)
         {
-            aObjetivo1 = false;
+            Moverse();
+            if (transform.position == objetivo1.transform.position)
+            {
+                aObjetivo1 = false;
+            }
+            if (transform.position == objetivo2.transform.position)
+            {
+                aObjetivo1 = true;
+            }
         }
-        if (transform.position == objetivo2.transform.position)
-        {
-            aObjetivo1 = true;
-        }
+        
 
     }
 

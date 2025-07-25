@@ -9,13 +9,17 @@ public class Timer : MonoBehaviour
     
     void Update()
     {
-        remainingTime -= Time.deltaTime;
-        timerText.text = remainingTime.ToString("0.00");
-
-        if (remainingTime <= 0)
+        if (!GameManager.pause)
         {
-            Debug.Log("Perdiste");
-            SceneManager.LoadScene(7);
+            remainingTime -= Time.deltaTime;
+            timerText.text = remainingTime.ToString("0.00");
+
+            if (remainingTime <= 0)
+            {
+                Debug.Log("Perdiste");
+                SceneManager.LoadScene(7);
+            }
         }
+        
     }
 }

@@ -21,9 +21,13 @@ public class EnemyChaser : Enemy
     
     void Update()
     {
-        seesPlayer = Physics.CheckSphere(transform.position, sightRange, playerMask);
+        if (!GameManager.pause)
+        {
+            seesPlayer = Physics.CheckSphere(transform.position, sightRange, playerMask);
 
-        if (seesPlayer) Moverse();
+            if (seesPlayer) Moverse();
+        }
+        
     }
 
     public override void Moverse()

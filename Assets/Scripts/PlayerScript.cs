@@ -84,41 +84,51 @@ public class PlayerScript : MonoBehaviour
         cameraForward = cameraForward.normalized;
         cameraRight = cameraRight.normalized;
 
-        grounded = Physics.Raycast(transform.position, Vector3.down, height * 0.5f + 0.2f, ground);
-        if (grounded) { 
-        canJump = true;
-        }
-
-        if (grounded && !isDashing)
+        if (GameManager.pause)
         {
-            rb.linearDamping = groundDrag;
-            climbTimer = climbMaxTime;
+            rb.linearVelocity = Vector3.zero;
         }
-        else
+
+        if (!GameManager.pause)
         {
-            rb.linearDamping = 0f;
+            grounded = Physics.Raycast(transform.position, Vector3.down, height * 0.5f + 0.2f, ground);
+            if (grounded)
+            {
+                canJump = true;
+            }
+
+            if (grounded && !isDashing)
+            {
+                rb.linearDamping = groundDrag;
+                climbTimer = climbMaxTime;
+            }
+            else
+            {
+                rb.linearDamping = 0f;
+            }
+
+            isWall = Physics.SphereCast(transform.position, sphereCastRadius, cameraForward, out frontWall, detectionLength, wall);
+            wallAngle = Vector3.Angle(cameraForward, -frontWall.normal);
+
+
+            StateOfClimb();
+            if (isClimbing) ClimbingMove();
+
+            SpeedControl();
+
+            ChargeTime();
+            if (!isCharging)
+            {
+                rb.AddForce(cameraForward * speed, ForceMode.Force);
+            }
         }
-
-        isWall = Physics.SphereCast(transform.position, sphereCastRadius, cameraForward, out frontWall, detectionLength, wall);
-        wallAngle = Vector3.Angle(cameraForward, -frontWall.normal);
-
         
-        StateOfClimb();
-        if(isClimbing) ClimbingMove();
-
-        SpeedControl();
-
-        ChargeTime();
-        if (!isCharging)
-        {
-            rb.AddForce(cameraForward * speed, ForceMode.Force);
-        }
         
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !GameManager.pause)
         {
             if (canJump)
             {
@@ -130,13 +140,13 @@ public class PlayerScript : MonoBehaviour
 
     public void OnDash(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && !GameManager.pause)
         {
             isCharging = true;
             rb.linearVelocity = Vector3.zero;
             gravityDirection = gravityDirection * dashGravityMultiplier;
         }
-        if (context.canceled)
+        if (context.canceled && !GameManager.pause)
         {
             isDashing = true;
             if (dashCharge < 2)
