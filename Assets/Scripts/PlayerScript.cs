@@ -253,5 +253,9 @@ public class PlayerScript : MonoBehaviour
         {
             collision.collider.GetComponent<IObjective>().ObjectiveReached();
         }
+        if (collision.collider.CompareTag("DeathPlane"))
+        {
+            SceneManager.LoadScene(7);
+        }
     }
 }
